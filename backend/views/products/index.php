@@ -26,7 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
-            'category_id',
+            'image_url:url',
+            'tree_id',
             'is_hidden',
 
             ['class' => 'yii\grid\ActionColumn'],

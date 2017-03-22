@@ -19,7 +19,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name') ?>
 
-    <?= $form->field($model, 'category_id') ?>
+    <?= $form->field($model, 'image_url') ?>
+
+    <?= $form->field($model, 'tree_id') ?>
 
     <?= $form->field($model, 'is_hidden') ?>
 

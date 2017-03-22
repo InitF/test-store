@@ -18,8 +18,8 @@ class ProductsSearch extends Products
     public function rules()
     {
         return [
-            [['id', 'category_id', 'is_hidden'], 'integer'],
-            [['name'], 'safe'],
+            [['id', 'tree_id', 'is_hidden'], 'integer'],
+            [['name', 'image_url'], 'safe'],
         ];
     }
 
@@ -60,11 +60,12 @@ class ProductsSearch extends Products
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'category_id' => $this->category_id,
+            'tree_id' => $this->tree_id,
             'is_hidden' => $this->is_hidden,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'image_url', $this->image_url]);
 
         return $dataProvider;
     }

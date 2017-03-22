@@ -9,12 +9,12 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
- * @property integer $category_id
+ * @property string $image_url
+ * @property integer $tree_id
  * @property integer $is_hidden
- * @property integer $image_url
  *
  * @property ProductTags[] $productTags
- * @property Categories $category
+ * @property Tree $tree
  */
 class Products extends \yii\db\ActiveRecord
 {
@@ -33,10 +33,10 @@ class Products extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['category_id', 'is_hidden'], 'integer'],
+            [['tree_id', 'is_hidden'], 'integer'],
             [['name'], 'string', 'max' => 45],
-            [['image_url'], 'image', 'extensions' => 'png, jpg'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categories::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['image_url'], 'string', 'max' => 100],
+            [['tree_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tree::className(), 'targetAttribute' => ['tree_id' => 'id']],
         ];
     }
 
@@ -47,10 +47,10 @@ class Products extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Имя',
-            'category_id' => 'Категория',
+            'name' => 'Название',
+            'image_url' => 'Изображение',
+            'tree_id' => 'Категория',
             'is_hidden' => 'Скрыть',
-            'image_url' => 'Изображение'
         ];
     }
 
@@ -65,9 +65,17 @@ class Products extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
+    public function getTree()
     {
-        return $this->hasOne(Categories::className(), ['id' => 'category_id']);
+        return $this->hasOne(Tree::className(), ['id' => 'tree_id']);
+    }
+
+    public function getImageUrlForBack()
+    {
+        if ($this->image_url != NULL){
+            return [$this->image_url];
+        }
+        return [];
     }
 
     public function upload()
@@ -78,4 +86,5 @@ class Products extends \yii\db\ActiveRecord
         $this->image_url = $web_path;
         return true;
     }
+
 }
