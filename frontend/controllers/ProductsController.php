@@ -7,5 +7,5 @@ use yii\rest\ActiveController;
 
 class ProductsController extends ActiveController
 {
-    public $modelClass = 'common/models/Products';
+    public $modelClass = 'common\models\Products';
 }

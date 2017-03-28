@@ -8,6 +8,7 @@ use common\models\search\ProductsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ProductsController implements the CRUD actions for Products model.
@@ -65,13 +66,23 @@ class ProductsController extends Controller
     {
         $model = new Products();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())){
+            $model->image_name = UploadedFile::getInstances($model, 'image_name');
+
+            if (!empty($model->image_name) && $model->upload()){
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } else {
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
         }
+        $model->image_name = '';
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -84,13 +95,22 @@ class ProductsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post())){
+            $model->image_name = UploadedFile::getInstances($model, 'image_name');
+
+            if (!empty($model->image_name) && $model->upload()){
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            } else {
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
         }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -104,6 +124,14 @@ class ProductsController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDeleteImg($id)
+    {
+        $model = $this->findModel($id);
+        unlink(Yii::getAlias('@productsImageDir') . '/' . $model->image_name);
+        $model->image_name = '';
+        return true;
     }
 
     /**

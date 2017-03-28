@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
- * @property string $image_url
+ * @property string $image_name
  * @property integer $tree_id
  * @property integer $is_hidden
  *
@@ -18,6 +18,8 @@ use Yii;
  */
 class Products extends \yii\db\ActiveRecord
 {
+    const FRONTEND_URL = 'http://f.test-store.test';
+
     /**
      * @inheritdoc
      */
@@ -35,7 +37,7 @@ class Products extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['tree_id', 'is_hidden'], 'integer'],
             [['name'], 'string', 'max' => 45],
-            [['image_url'], 'string', 'max' => 100],
+            [['image_name'], 'image'],
             [['tree_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tree::className(), 'targetAttribute' => ['tree_id' => 'id']],
         ];
     }
@@ -48,7 +50,7 @@ class Products extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Название',
-            'image_url' => 'Изображение',
+            'image_name' => 'Изображение',
             'tree_id' => 'Категория',
             'is_hidden' => 'Скрыть',
         ];
@@ -72,19 +74,27 @@ class Products extends \yii\db\ActiveRecord
 
     public function getImageUrlForBack()
     {
-        if ($this->image_url != NULL){
-            return [$this->image_url];
+        if ($this->image_name != NULL){
+            return [self::FRONTEND_URL . Yii::getAlias('@productsImageWebPath'). '/' .  $this->image_name];
         }
         return [];
     }
 
     public function upload()
     {
-        $path = '/var/www/work/test-store/frontend/web/img/products/' . $this->image_url[0]->baseName . '.' . $this->image_url[0]->extension;
-        $web_path = '/img/products/' . $this->image_url[0]->baseName . '.' . $this->image_url[0]->extension;
-        $this->image_url[0]->saveAs($path);
-        $this->image_url = $web_path;
+        $path = Yii::getAlias('@productsImageDir') . '/' . $this->image_name[0]->baseName  . '.' . $this->image_name[0]->extension;
+        $web_path = $this->image_name[0]->baseName . '.' . $this->image_name[0]->extension;
+        $this->image_name[0]->saveAs($path);
+        $this->image_name = $web_path;
         return true;
+    }
+
+    public function getFileInfoForBack()
+    {
+        $fileName = explode('/', $this->image_name);
+        $fileName = $fileName[count($fileName) - 1];
+        $fileSize = filesize(Yii::getAlias('@productsImageDir') . '/' . $fileName);
+        return ['size' => $fileSize, 'caption' => $fileName, 'showDrag' => false];
     }
 
 }

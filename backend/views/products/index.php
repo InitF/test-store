@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'name',
-            'image_url:url',
+            'image_name',
             'tree_id',
             'is_hidden',
 

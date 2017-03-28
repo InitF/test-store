@@ -19,7 +19,7 @@ class ProductsSearch extends Products
     {
         return [
             [['id', 'tree_id', 'is_hidden'], 'integer'],
-            [['name', 'image_url'], 'safe'],
+            [['name', 'image_name'], 'safe'],
         ];
     }
 
@@ -65,7 +65,7 @@ class ProductsSearch extends Products
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'image_url', $this->image_url]);
+            ->andFilterWhere(['like', 'image_name', $this->image_name]);
 
         return $dataProvider;
     }

@@ -12,15 +12,25 @@ use kartik\file\FileInput;
 
 <div class="products-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'options' => [
+            'enctype' => 'multipart/form-data'
+        ]
+    ]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'image_url')->widget(FileInput::className(), [
+    <?= $form->field($model, 'image_name')->widget(FileInput::className(), [
         'pluginOptions' => [
             'initialPreview'=>$model->getImageUrlForBack(),
             'initialPreviewAsData'=>true,
-            'overwriteInitial'=>false,
+            'overwriteInitial'=>true,
+            'showRemove' => false,
+            'showUpload' => false,
+            'deleteUrl' => '/products/delete-img/?id=' . $model->id,
+            'initialPreviewConfig' => [
+                $model->getFileInfoForBack()
+            ]
         ]
     ])?>
 
