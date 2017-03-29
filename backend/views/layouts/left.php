@@ -18,6 +18,10 @@
             [
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
+                    ['label' => 'Users', 'url' => ['/user']],
+                    ['label' => 'Products', 'url' => ['/products']],
+                    ['label' => 'Categories', 'url' => ['/tree']],
+                    ['label' => 'Tags', 'url' => ['/tags']],
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
