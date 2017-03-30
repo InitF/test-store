@@ -14,6 +14,12 @@ return [
     'modules' => [
         'treemanager' =>  [
             'class' => '\kartik\tree\Module',
+        ],
+        'rbac' =>  [
+            'class' => 'johnitvn\rbacplus\Module'
+        ],
+        'gridview' => [
+            'class' => 'kartik\grid\Module'
         ]
     ],
     'components' => [

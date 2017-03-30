@@ -6,8 +6,17 @@ namespace backend\models;
 use yii\base\Model;
 use common\models\User;
 
+/**
+ * Class UpdateUserForm
+ * @package backend\models
+ *
+ * @property User $objUser
+ */
 class UpdateUserForm extends Model
 {
+    private $objUser;
+
+    public $id;
     public $username;
     public $email;
     public $password;
@@ -21,34 +30,60 @@ class UpdateUserForm extends Model
     {
         return [
             ['username', 'trim'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
+            [
+                'username',
+                'unique',
+                'targetClass' => '\common\models\User',
+                'message' => 'This username has already been taken.',
+                'filter' => ['not', ['id' => $this->id]]
+            ],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'trim'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            [
+                'email',
+                'unique',
+                'targetClass' => '\common\models\User',
+                'message' => 'This email address has already been taken.',
+                'filter' => ['not', ['id' => $this->id]]
+            ],
 
             ['password', 'string', 'min' => 6],
         ];
     }
 
+    public function uniqueValidate()
+    {
+
+    }
+
+    public function setAttr(User $user)
+    {
+        $this->objUser = $user;
+        $this->id = $user->id;
+        $this->username = $user->username;
+        $this->email = $user->email;
+        $this->status = $user->status;
+    }
+
     /**
      * Signs user up.
-     * @param $user User
+     *
      * @return User|null the saved model or null if saving fails
      */
-    public function update($user)
+    public function update()
     {
         if (!$this->validate()) {
             return null;
         }
 
-        if (!empty($this->username)) $user->username = $this->username;
-        if (!empty($this->email)) $user->email = $this->email;
-        if (!empty($this->status)) $user->status = $this->status;
-        if (!empty($this->password)) $user->setPassword($this->password);
+        $this->objUser->username = $this->username;
+        $this->objUser->email = $this->email;
+        $this->objUser->status = $this->status;
+        if (!empty($this->password)) $this->objUser->setPassword($this->password);
 
-        return $user->save() ? $user : null;
+        return $this->objUser->update() ? $this->objUser : null;
     }
 }

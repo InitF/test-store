@@ -8,7 +8,7 @@
                 <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
+                <p><?= Yii::$app->user->getIdentity()->username ?? 'Guest'  ?></p>
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
@@ -18,7 +18,15 @@
             [
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
-                    ['label' => 'Users', 'url' => ['/user']],
+                    ['label' => 'Users', 'url' => ['/user'], 'visible' => Yii::$app->user->can('adminMenu')],
+                    ['label' => 'RBAC', 'visible' => Yii::$app->user->can('adminMenu'),
+                        'items' => [
+                            ['label' => 'Rule', 'url' => ['/rbac/rule']],
+                            ['label' => 'Permission', 'url' => ['/rbac/permission']],
+                            ['label' => 'Role', 'url' => ['/rbac/role']],
+                            ['label' => 'Assigment', 'url' => ['/rbac/assignment']],
+                        ]
+                    ],
                     ['label' => 'Products', 'url' => ['/products']],
                     ['label' => 'Categories', 'url' => ['/tree']],
                     ['label' => 'Tags', 'url' => ['/tags']],

@@ -6,6 +6,8 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
 
+dmstr\web\AdminLteAsset::register($this);
+
 $this->title = 'Sign In';
 
 $fieldOptions1 = [
@@ -19,9 +21,23 @@ $fieldOptions2 = [
 ];
 ?>
 
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>">
+<head>
+    <meta charset="<?= Yii::$app->charset ?>"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?= Html::csrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
+    <?php $this->head() ?>
+</head>
+<body class="login-page">
+
+<?php $this->beginBody() ?>
+
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>Admin</b>LTE</a>
+
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -53,18 +69,10 @@ $fieldOptions2 = [
 
         <?php ActiveForm::end(); ?>
 
-        <div class="social-auth-links text-center">
-            <p>- OR -</p>
-            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in
-                using Facebook</a>
-            <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google-plus"></i> Sign
-                in using Google+</a>
-        </div>
-        <!-- /.social-auth-links -->
-
-        <a href="#">I forgot my password</a><br>
-        <a href="register.html" class="text-center">Register a new membership</a>
-
     </div>
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
+<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>

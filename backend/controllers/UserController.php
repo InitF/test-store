@@ -3,9 +3,11 @@
 namespace backend\controllers;
 
 use backend\models\SignupForm;
+use backend\models\UpdateUserForm;
 use Yii;
 use common\models\User;
 use common\models\search\UserSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -21,6 +23,15 @@ class UserController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -83,9 +94,11 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $userModel = $this->findModel($id);
+        $model = new UpdateUserForm();
+        $model->setAttr($userModel);
 
-        if ($model->load(Yii::$app->request->post()) && $model->update($model)) {
+        if ($model->load(Yii::$app->request->post()) && $model->update()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
