@@ -43,8 +43,6 @@ class ProductsSearch extends Products
     {
         $query = Products::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class ProductsSearch extends Products
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'tree_id' => $this->tree_id,

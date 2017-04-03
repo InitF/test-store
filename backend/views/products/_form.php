@@ -30,7 +30,8 @@ use kartik\file\FileInput;
             'deleteUrl' => '/products/delete-img/?id=' . $model->id,
             'initialPreviewConfig' => [
                 $model->getFileInfoForBack()
-            ]
+            ],
+            'options' => ['id' => 'katrik-file-input132']
         ]
     ])?>
 
@@ -42,7 +43,7 @@ use kartik\file\FileInput;
         'fontAwesome' => true,
         'asDropdown' => true,
         'multiple' => false,
-        'options' => ['disabled' => false]
+        'options' => ['disabled' => false, 'id' => 'katrik-tree132']
     ]) ?>
 
     <?= $form->field($model, 'is_hidden')->checkbox() ?>

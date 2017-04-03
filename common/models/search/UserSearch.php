@@ -43,8 +43,6 @@ class UserSearch extends User
     {
         $query = User::find();
 
-        // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -57,7 +55,6 @@ class UserSearch extends User
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,

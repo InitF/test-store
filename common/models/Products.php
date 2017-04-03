@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "products".
@@ -19,6 +20,8 @@ use Yii;
 class Products extends \yii\db\ActiveRecord
 {
     const FRONTEND_URL = 'http://f.test-store.test';
+
+    private $image;
 
     /**
      * @inheritdoc
@@ -82,11 +85,27 @@ class Products extends \yii\db\ActiveRecord
 
     public function upload()
     {
-        $path = Yii::getAlias('@productsImageDir') . '/' . $this->image_name[0]->baseName  . '.' . $this->image_name[0]->extension;
-        $web_path = $this->image_name[0]->baseName . '.' . $this->image_name[0]->extension;
-        $this->image_name[0]->saveAs($path);
+        $path = Yii::getAlias('@productsImageDir') . '/' . $this->image[0]->baseName  . '.' . $this->image[0]->extension;
+        $web_path = $this->image[0]->baseName . '.' . $this->image[0]->extension;
+        $this->image[0]->saveAs($path);
         $this->image_name = $web_path;
         return true;
+    }
+
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        $this->image = UploadedFile::getInstances($this, 'image_name');
+        if (!empty($this->image)){
+            if ($this->upload()) {
+                return parent::save($runValidation, $attributeNames);
+            }
+            return false;
+        }
+
+        if (!$this->isNewRecord) {
+            $this->image_name = $this->getOldAttribute('image_name');
+        }
+        return parent::save($runValidation, $attributeNames);
     }
 
     public function getFileInfoForBack()

@@ -51,12 +51,8 @@ class UpdateUserForm extends Model
             ],
 
             ['password', 'string', 'min' => 6],
+            ['status', 'integer']
         ];
-    }
-
-    public function uniqueValidate()
-    {
-
     }
 
     public function setAttr(User $user)
@@ -84,6 +80,6 @@ class UpdateUserForm extends Model
         $this->objUser->status = $this->status;
         if (!empty($this->password)) $this->objUser->setPassword($this->password);
 
-        return $this->objUser->update() ? $this->objUser : null;
+        return $this->objUser->save() ? $this->objUser : null;
     }
 }
