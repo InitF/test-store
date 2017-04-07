@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use common\models\Tree;
 
 return [
     [
@@ -20,24 +21,30 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'image_name',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'tree_id',
+        'value' => function($model, $key, $index, $widget) {
+            return $model->tree->name;
+        },
+        'filterType' => \kartik\grid\GridView::FILTER_SELECT2,
+        'filter' => ['' => 'All'] + \yii\helpers\ArrayHelper::map(Tree::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+        'filterWidgetOptions'=>[
+            'hideSearch' => true,
+        ],
     ],
     [
-        'class'=>'\kartik\grid\DataColumn',
+        'class'=>'\kartik\grid\BooleanColumn',
         'attribute'=>'is_hidden',
+        'trueLabel' => 'Yes',
+        'falseLabel' => 'No',
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
+        'template' => '{update} {delete}',
         'dropdown' => false,
         'vAlign'=>'middle',
         'urlCreator' => function($action, $model, $key, $index) { 
                 return Url::to([$action,'id'=>$key]);
         },
-        'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
         'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
         'deleteOptions'=>['role'=>'modal-remote','title'=>'Delete', 
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api

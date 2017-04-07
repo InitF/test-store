@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use common\models\User;
 
 return [
     [
@@ -20,32 +21,31 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'auth_key',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'password_hash',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'password_reset_token',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'email',
     ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'status',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'created_at',
-    // ],
-    // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'updated_at',
-    // ],
+     [
+         'class'=>'\kartik\grid\DataColumn',
+         'attribute'=>'status',
+         'value' => function($model, $key, $index, $widget) {
+            if ($model->status == 0) {return 'Delited';}
+            return 'Active';
+         },
+         'filterType' => \kartik\grid\GridView::FILTER_SELECT2,
+         'filter' => ['' => 'All', User::STATUS_ACTIVE => 'Active', User::STATUS_DELETED => 'Delited'],
+         'filterWidgetOptions'=>[
+             'hideSearch' => true,
+         ],
+     ],
+     [
+         'class'=>'\kartik\grid\DataColumn',
+         'attribute'=>'created_at',
+         'format' => 'date'
+     ],
+     [
+         'class'=>'\kartik\grid\DataColumn',
+         'attribute'=>'updated_at',
+         'format' => 'date'
+     ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,

@@ -263,6 +263,14 @@ class ProductsController extends Controller
        
     }
 
+    public function actionDeleteImg($id)
+    {
+        $model = $this->findModel($id);
+        unlink(Yii::getAlias('@productsImageDir') . '/' . $model->image_name);
+        $model->image_name = '';
+        return true;
+    }
+
     /**
      * Finds the Products model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
